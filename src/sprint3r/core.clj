@@ -1,4 +1,5 @@
-(ns sprint3r.core)
+(ns sprint3r.core
+  (:import (java.util ArrayList)))
 
 ; REPL
 (+ 1 2 3)
@@ -212,13 +213,106 @@ c
 (partition 4 (range 18))
 (sort-by :age [{:name "David" :age 36} {:name "Michael" :age 40} {:name "David" :age 25}])
 (ffirst [[8 9] [7 5]])
+(frequencies ['a 'b 'a 'a])
 
 [{:name "David" :age 36}
  {:name "Michael" :age 40}
  {:name "David" :age 25}]
 (take 3 (sort-by #(count (vals %)) ()))
 
-; Threading macro
+; Thread First
+(subvec (assoc (conj (conj [1 2 3] 4) 5) 1 1.5) 1 3)
+(-> [1 2 3]
+    (conj 4)
+    (conj 5)
+    (assoc 1 1.5)
+    (subvec 1 3))
+
+; Thread Last
+(frequencies (filter odd? (map inc (take 10 (repeatedly #(rand-int 11))))))
+(->> (repeatedly #(rand-int 11))
+     (take 10)
+     (map inc)
+     (filter odd?)
+     (frequencies))
+
+(macroexpand
+  '(->> [1 2 3]
+        (map #(* 3))
+        (remove odd?)))
 
 
-; State
+; Java interop
+(Math/sqrt 9)
+(Integer/parseInt "10")
+(java.util.UUID/randomUUID)
+(def ja (ArrayList.))
+(.add ja 1)
+ja
+(class ja)
+
+; future
+(do
+  (future (Thread/sleep 4000)
+          (println "Slow"))
+  (future (Thread/sleep 2000)
+          (println "Fast")))
+
+; delay
+(def de (delay (println "Expensive operation")
+               "Return value"))
+de
+(deref de)
+@de
+(future 1)
+@(future 2)
+
+; promise
+(def pm (promise))
+(future (Thread/sleep 2000)
+        (deliver pm "value"))
+; ... do something else
+@pm
+
+; atom
+(def at (atom 10))
+(reset! at 11)
+at
+@at
+(swap! at * 5)
+(swap! at * 6)
+(swap! at * 7)
+(swap! at * 8)
+@at
+(def m (atom {1 {:name "Kyle" :score 2} 2 {:name "Tim" :score 6}}))
+(defn plus-five [v]
+  (+ v 5))
+(swap! m update-in [1 :score] plus-five)
+
+; agent
+(def ag (agent [5 9]))
+(defn slow-conj [coll x]
+  (Thread/sleep 10000)
+  (println "expensive")
+  (conj coll x))
+(send ag slow-conj 15)
+@ag
+
+; Recursion
+(defn repeat-inc [c n]
+  (if (= c n)
+    "Success"
+    (repeat-inc (inc c) n)))
+(repeat-inc 0 5)
+(repeat-inc 0 1000000)
+(defn repeat-inc-recur [c n]
+  (if (= c n)
+    "Success"
+    (recur (inc c) n)))
+(repeat-inc-recur 0 1000000)
+(defn repeat-inc-loop [n]
+  (loop [c 0]
+    (if (= c n)
+      "Success"
+      (recur (inc c)))))
+(repeat-inc-loop 1000000)
