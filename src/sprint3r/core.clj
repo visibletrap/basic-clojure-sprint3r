@@ -364,3 +364,6 @@ at
 
 ; Web
 ; src/sprint3r/web
+
+; Polymorphic & Record
+; http://www.braveclojure.com/multimethods-records-protocols/
