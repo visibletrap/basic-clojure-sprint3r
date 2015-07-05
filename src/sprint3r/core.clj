@@ -320,6 +320,25 @@ at
 (send ag slow-conj 15)
 @ag
 
+; pmap
+(def base "https://en.wikipedia.org/wiki/")
+(def players [{:name "Manuel_Neuer" :word "Germany"}
+              {:name "Franck_Ribéry" :word "France"}
+              {:name "Andrés_Iniesta" :word "Spain"}
+              {:name "Xavi" :word "Spain"}])
+(defn count-word [{:keys [name word]}]
+  (->> name
+       (str base)
+       (slurp)
+       (re-seq (re-pattern word))
+       (count)))
+(time (->> players
+           (map (juxt :name count-word))
+           (println)))
+(time (->> players
+           (pmap (juxt :name count-word))
+           (println)))
+
 ; Recursion
 (defn repeat-inc [c n]
   (if (= c n)
