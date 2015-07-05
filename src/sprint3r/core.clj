@@ -145,6 +145,7 @@ b
 (assoc {:a 1 :b 2} :a 3)
 (dissoc {:a 1 :b 2} :a)
 (dissoc {:a 1 :b 2 :c 3} :a :b)
+(get-in {:a {:b {:c {:d 5}}}} [:a :b :c :d])
 (assoc-in {:a {:b {:c {:d 5}}}} [:a :b :c :d] 6)
 (def c (merge {:a 1 :b 2} {:c 3}))
 c
@@ -220,6 +221,27 @@ c
  {:name "David" :age 25}]
 (take 3 (sort-by #(count (vals %)) ()))
 
+; Vector destructuring
+(defn v-dest [[a [b _ c] :as z]]
+  [a b c z])
+(def nv [10 [20 30 40] 50])
+(v-dest nv)
+(let [[a [b _ c] :as z] nv]
+  [z c b a])
+
+; Map destructuring
+(defn m-dest
+  [{a :x b :y :keys [c d] :as z}]
+  [a b c d z])
+(def nm {:x 1 :y "B" :c \C :d 4.0})
+(m-dest nm)
+(let [{a :x b :y :keys [c d] :as z} nm]
+  [z d c b a])
+
+; Mix
+(let [[_ {:keys [b]}] [{:a 1 :b 2} {:a 3 :b 4}]]
+  b)
+
 ; Thread First
 (subvec (assoc (conj (conj [1 2 3] 4) 5) 1 1.5) 1 3)
 (-> [1 2 3]
@@ -236,7 +258,7 @@ c
      (filter odd?)
      (frequencies))
 
-(macroexpand
+(macroexpand-1
   '(->> [1 2 3]
         (map #(* 3))
         (remove odd?)))
@@ -316,3 +338,29 @@ at
       "Success"
       (recur (inc c)))))
 (repeat-inc-loop 1000000)
+
+; Require
+(comment
+  (upper-case "a")
+  )
+(clojure.string/upper-case "a")
+(require '[clojure.string :as string])
+(string/upper-case "a")
+(require '[clojure.string :refer [upper-case]])
+(upper-case "a")
+(ns sprint3r.core
+  (:require [clojure.string :as cs]))
+*ns*
+(cs/lower-case "A")
+
+; Macro
+(when (< 2 1) 5 6)
+(when (> 2 1) 5 6)
+(macroexpand-1 '(when (< 2 1) 5 6))
+(macroexpand-1 '(when (> 2 1) 5 6))
+
+; Jar
+; src/sprint3r/main
+
+; Web
+; src/sprint3r/web
