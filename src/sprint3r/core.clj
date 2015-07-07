@@ -372,17 +372,37 @@ at
 *ns*
 (cs/lower-case "A")
 
-; Macro
-(when (< 2 1) 5 6)
-(when (> 2 1) 5 6)
-(macroexpand-1 '(when (< 2 1) 5 6))
-(macroexpand-1 '(when (> 2 1) 5 6))
-
 ; Jar
 ; src/sprint3r/main
 
 ; Web
 ; src/sprint3r/web
 
+; Desktop App
+
+; Macro
+(when (< 2 1) 5 6)
+(when (> 2 1) 5 6)
+(macroexpand-1 '(when (< 2 1) 5 6))
+(macroexpand-1 '(when (> 2 1) 5 6))
+
+; core.test
+; test/sprint3r/core_test.clj
+
+; ClojureScript
+
 ; Polymorphic & Record
 ; http://www.braveclojure.com/multimethods-records-protocols/
+
+; core.async
+(require '[clojure.core.async :refer [>! <! go chan]])
+(def cha (chan))
+(go (loop []
+      (if-let [data (<! cha)]
+        (do (println data)
+            (recur))
+        "Done")))
+(go (>! cha "Ha"))
+(go (>! cha false))
+
+(clojure.pprint/pprint (macroexpand-1 '(go (>! cha "Ha"))))
