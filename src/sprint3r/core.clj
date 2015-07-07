@@ -212,6 +212,10 @@ c
 (sort-by :age [{:name "David" :age 36} {:name "Michael" :age 40} {:name "David" :age 25}])
 (ffirst [[8 9] [7 5]])
 (frequencies ['a 'b 'a 'a])
+
+(reduce (fn [sum e] (+ sum e)) 0 [1 2 3])
+(reduce (fn [m e] (str m (first e))) "" ["Aaron" "Ben" "Daniel" "Foster"])
+(reduce (fn [m e] (str m e)) "" (map first ["Aaron" "Ben" "Daniel" "Foster"]))
 ; https://www.4clojure.com/problem/12
 ; https://www.4clojure.com/problem/13
 ; https://www.4clojure.com/problem/17
