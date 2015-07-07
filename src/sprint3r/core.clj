@@ -275,6 +275,7 @@ c
 (Math/sqrt 9)
 (Integer/parseInt "10")
 (java.util.UUID/randomUUID)
+(java.util.Collections/binarySearch [:a :b :c :d :e] :c compare)
 (def ja (ArrayList.))
 (.add ja 1)
 ja
