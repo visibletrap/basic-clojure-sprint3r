@@ -6,6 +6,7 @@
 *1
 *2
 (println "Hello, World")
+; https://www.4clojure.com/problem/2
 
 ; Function
 (defn hello [name]
@@ -54,23 +55,8 @@ x
 ; _ for don't care
 (defn print-second [_ a] (println a))
 (print-second 1 3)
-
-;; Exercise 1
-(declare calls)
-(comment
-  (calls)
-  (calls #(println 1))
-  (calls #(println 1)
-         #(println 2))
-  (calls #(println 1)
-         #(println 2)
-         #(println 3))
-  (calls #() #() #() #(println 4))
-  (calls #() #() #() #() #() #()
-         #() #() #() #() #() #()
-         #() #() #() #() #() #()
-         #(println "Last"))
-  )
+; https://www.4clojure.com/problem/14
+; https://www.4clojure.com/problem/15
 
 ; let
 (let [a "Apple"
@@ -80,6 +66,8 @@ x
   (println a)
   (println b)
   (println c))
+; https://www.4clojure.com/problem/35
+; https://www.4clojure.com/problem/36
 
 ; apply
 (defn var-args [& args]
@@ -130,6 +118,8 @@ a
 b
 (assoc [1 2 3] 0 4)
 (vector 1 2 3)
+; https://www.4clojure.com/problem/6
+; https://www.4clojure.com/problem/7
 
 ; List
 '(1 2 3)
@@ -138,6 +128,8 @@ b
 (nth '(1 2 3) 1)
 (peek '(1 2 3))
 (pop '(1 2 3))
+; https://www.4clojure.com/problem/4
+; https://www.4clojure.com/problem/5
 
 ; Map
 {:a 1 :b 2}
@@ -164,6 +156,8 @@ c
 
 (if ({:a 1} :a) "has A" "doesn't have A")
 (if ({:b 1} :a) "has A" "doesn't have A")
+; https://www.4clojure.com/problem/10
+; https://www.4clojure.com/problem/11
 
 ; Mix
 (get-in {:a {:b {:c 1}}} [:a :b :c])
@@ -181,6 +175,9 @@ c
 (contains? #{1 2} 2)
 (#{1 2} 2)
 (#{1 2} 3)
+; https://www.4clojure.com/problem/8
+; https://www.4clojure.com/problem/9
+; https://www.4clojure.com/problem/47
 
 ; Collection functions
 
@@ -215,6 +212,13 @@ c
 (sort-by :age [{:name "David" :age 36} {:name "Michael" :age 40} {:name "David" :age 25}])
 (ffirst [[8 9] [7 5]])
 (frequencies ['a 'b 'a 'a])
+; https://www.4clojure.com/problem/12
+; https://www.4clojure.com/problem/13
+; https://www.4clojure.com/problem/17
+; https://www.4clojure.com/problem/18
+; https://www.4clojure.com/problem/20
+; https://www.4clojure.com/problem/31
+
 
 [{:name "David" :age 36}
  {:name "Michael" :age 40}
@@ -228,6 +232,8 @@ c
 (v-dest nv)
 (let [[a [b _ c] :as z] nv]
   [z c b a])
+; https://www.4clojure.com/problem/52
+; https://www.4clojure.com/problem/51
 
 ; Map destructuring
 (defn m-dest
@@ -249,6 +255,7 @@ c
     (conj 5)
     (assoc 1 1.5)
     (subvec 1 3))
+; https://www.4clojure.com/problem/71
 
 ; Thread Last
 (frequencies (filter odd? (map inc (take 10 (repeatedly #(rand-int 11))))))
@@ -262,7 +269,7 @@ c
   '(->> [1 2 3]
         (map #(* 3))
         (remove odd?)))
-
+; https://www.4clojure.com/problem/72
 
 ; Java interop
 (Math/sqrt 9)
@@ -357,6 +364,7 @@ at
       "Success"
       (recur (inc c)))))
 (repeat-inc-loop 1000000)
+; https://www.4clojure.com/problem/68
 
 ; Require
 (comment
