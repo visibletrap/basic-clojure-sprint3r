@@ -284,6 +284,7 @@ c
 (.add ja 1)
 ja
 (class ja)
+(.availableProcessors (Runtime/getRuntime))
 
 ; future
 (do
