@@ -11,8 +11,9 @@ A clojure code snippets to use in my [Basic Clojure course](http://www.eventbrit
 * Install [Cursive](https://cursiveclojure.com/userguide/)
 
 ## Credits
-This course material borrows and adapts from these great resources
+This course material borrows and adapts from these fantastic resources
 * [Clojure for the brave and true](http://www.braveclojure.com)
 * [Clojure By Example](http://kimh.github.io/clojure-by-example/)
 * [Living Clojure](http://shop.oreilly.com/product/0636920034292.do) Book - Highly recommened book for Clojure beginner
 * [Cognitect Clojure Lab](https://github.com/cognitect/clojure-lab)
+* [4clojure](https://www.4clojure.com)
