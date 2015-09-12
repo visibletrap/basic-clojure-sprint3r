@@ -1,8 +1,10 @@
 (ns sprint3r.core
-  (:import (java.util ArrayList)))
+  (:import (java.util ArrayList)
+           (java.util Collections)))
 
 ; REPL
-(+ 1 2 3)
++ 1
+(* 3 (+) 1 2 3)
 *1
 *2
 (println "Hello, World")
@@ -11,7 +13,7 @@
 ; Function
 (defn hello [name]
   (str "Hello, " name))
-(hello "Clojure")
+(hello "Everyone")
 
 ; Multi-arity
 (defn hello2
@@ -32,10 +34,15 @@
 (print-numbers 1)
 (print-numbers 1 2)
 (print-numbers 1 2 3)
+(print-numbers 1 2 3 4 "Hi" 5)
 
 ; Anonymous function
 (fn [n] (* n 2))
+(defn orange [n] (* n 2))
+
+(orange 3)
 ((fn [n] (* n 2)) 3)
+(#(* % 2) 3)
 
 (def x "X-men")
 x
@@ -58,16 +65,29 @@ x
 ; https://www.4clojure.com/problem/14
 ; https://www.4clojure.com/problem/15
 
+
 ; let
 (let [a "Apple"
       b "Bird"
       c (str b " eats " a)
+      d (fn [] (str b b))
       _ "??"]
-  (println a)
-  (println b)
-  (println c))
+  ;(println a)
+  ;(println b)
+  ;(println c)
+  (println d)
+  (println (d)))
+a
 ; https://www.4clojure.com/problem/35
 ; https://www.4clojure.com/problem/36
+
+(defn va [& args]
+  (println args)
+  (apply + args))
+(va 1 2)
+(+ 1 2)
+(apply + '(1 2))
+
 
 ; apply
 (defn var-args [& args]
@@ -95,6 +115,13 @@ x
 (do (+ 1 2)
     (* 2 3))
 
+(defn ifs2 [x]
+  (if x
+    (println "True")
+    100
+    (println "False")
+    ":("))
+
 (defn ifs [x]
   (if x
     (do (println "True")
@@ -105,15 +132,22 @@ x
 (ifs true)
 (ifs false)
 
+"a"
+\a
+
 ; Vector
 [\a \b \c]
 (get [\a \b \c] 0)
-([\a \b \c] 1)
+([\a \b \c] 3)
 (count [1 2 3])
 (conj [1 2 3] 4 5 6)
-(def a [1 2 3])
-(conj a 4)
+(conj [1 2 3] 4)
+
+
+(def a [0 1 2 3 4])
+a
 (def b (conj a 5))
+;(def b (conj a 5))
 a
 b
 (assoc [1 2 3] 0 4)
@@ -122,22 +156,33 @@ b
 ; https://www.4clojure.com/problem/7
 
 ; List
+(1 2 3)
 '(1 2 3)
 (list 1 2 3)
+(conj [1 2 3] 4)
 (conj '(1 2 3) 4)
 (nth '(1 2 3) 1)
-(peek '(1 2 3))
+(pop ( '(1 2 3) 4))
 (pop '(1 2 3))
 ; https://www.4clojure.com/problem/4
 ; https://www.4clojure.com/problem/5
 
 ; Map
 {:a 1 :b 2}
+{:a 1, :b 2}
+{:a 1
+ :b 2}
 (assoc {:a 1 :b 2} :c 3)
-(assoc {:a 1 :b 2} :a 3)
+(def a {:a 1 :b 2})
+(def b (assoc a :a 3))
+a
+b
 (dissoc {:a 1 :b 2} :a)
 (dissoc {:a 1 :b 2 :c 3} :a :b)
-(get-in {:a {:b {:c {:d 5}}}} [:a :b :c :d])
+(get-in {:a
+         {:b
+          {:c
+           {:d 5}}}} [:a])
 (assoc-in {:a {:b {:c {:d 5}}}} [:a :b :c :d] 6)
 (def c (merge {:a 1 :b 2} {:c 3}))
 c
@@ -148,6 +193,8 @@ c
 (get c :d)
 (get c :d 4)
 (:a c)
+(1 {1 "A" 2 "B"})
+({1 "A" 2 "B"} 1)
 (:d c)
 (:d c 4)
 (c :a)
@@ -161,10 +208,16 @@ c
 
 ; Mix
 (get-in {:a {:b {:c 1}}} [:a :b :c])
+(inc 2)
 (update-in {:a {:b {:c {:d 5}}}} [:a :b :c :d] inc)
-(update-in {:a {:b {:c {:d 5}}}} [:a :b :c :d] * 3)
-(update-in {:a {:b [{:z 1} {:y {:x 10}}]}} [:a :b 1 :y :x] #(if (odd? %) (inc %) (dec %)))
+(update-in {:a {:b {:c {:d 5}}}} [:a :b :c :d] * 3 10 9)
+(update-in {:a {:b [{:z 1} {:y {:x 10}}]}}
+           [:a :b 1 :y :x]
+           #(if (odd? %) (inc %) (dec %)))
 (assoc-in [1 {:a [2 {:b 3}]}] [1 :a] 4)
+(assoc-in [1 {:a [2 {:b 3}]}] [1 :a] 4)
+
+[1 {:a [2 {:b 3}]}] => [1 {:a [2 {:b 4}]}]
 
 ; Set
 #{1 2}
@@ -175,6 +228,7 @@ c
 (contains? #{1 2} 2)
 (#{1 2} 2)
 (#{1 2} 3)
+(clojure.set/intersection #{1 3} #{1 5})
 ; https://www.4clojure.com/problem/8
 ; https://www.4clojure.com/problem/9
 ; https://www.4clojure.com/problem/47
@@ -182,7 +236,9 @@ c
 ; Collection functions
 
 ; Seq
-(seq [1 2 3])
+(class (seq [1 2 3]))
+(class (seq #{1 2}))
+(class (seq {1 2}))
 (map inc [0 1 2])
 (map inc '(0 1 2))
 (map inc #{1 2 3})
@@ -190,6 +246,7 @@ c
 ; Lazy Seq
 (range 5)
 (take 3 (range 5))
+(take 100 (range))
 (take 5 (iterate inc 10))
 
 ; Some useful functions
@@ -197,9 +254,9 @@ c
 (rest [0 1 2 3])
 (count #{1 2 3})
 (empty? {})
-(some {:a 1 :b 2} [:a :b])
-(every? pos? [1 2 3])
-(not-any? pos? [-1 -2 -3])
+(some {:a 1 :b 2} [:d :b])
+(every? pos? [-1 1 2 3])
+(not-any? pos? [-1 -2 -3 4])
 (filter even? (range 10))
 (remove odd? (range 10))
 (take 10 (cycle [1 2 3]))
@@ -209,13 +266,23 @@ c
 (butlast [1 2 3 4 5])
 (partition-by #(= 3 %) [1 2 3 4 5])
 (partition 4 (range 18))
-(sort-by :age [{:name "David" :age 36} {:name "Michael" :age 40} {:name "David" :age 25}])
+(partition-all 4 (range 18))
+(reverse (sort-by :age [{:name "David" :age 36} {:name "Michael" :age 40} {:name "David" :age 25}]))
 (ffirst [[8 9] [7 5]])
 (frequencies ['a 'b 'a 'a])
+(identity 1)
 
+(reduce + 0 [1 2 3 4])
 (reduce (fn [sum e] (+ sum e)) 0 [1 2 3])
-(reduce (fn [m e] (str m (first e))) "" ["Aaron" "Ben" "Daniel" "Foster"])
-(reduce (fn [m e] (str m e)) "" (map first ["Aaron" "Ben" "Daniel" "Foster"]))
+(+ 0 1)
+(+ 1 2)
+(+ 3 3)
+(reduce (fn [m e] (str m (first e)))
+        ""
+        ["Aaron" "Ben" "Daniel" "Foster"])
+(reduce (fn [m e] (str m e))
+        ""
+        (map first ["Aaron" "Ben" "Daniel" "Foster"]))
 ; https://www.4clojure.com/problem/12
 ; https://www.4clojure.com/problem/13
 ; https://www.4clojure.com/problem/17
@@ -258,7 +325,8 @@ c
     (conj 4)
     (conj 5)
     (assoc 1 1.5)
-    (subvec 1 3))
+    (subvec 1 3)
+    )
 ; https://www.4clojure.com/problem/71
 
 ; Thread Last
@@ -267,7 +335,10 @@ c
      (take 10)
      (map inc)
      (filter odd?)
-     (frequencies))
+     (frequencies)
+      )
+
+(= 1 1 1)
 
 (macroexpand-1
   '(->> [1 2 3]
@@ -278,8 +349,9 @@ c
 ; Java interop
 (Math/sqrt 9)
 (Integer/parseInt "10")
+(int 10.1)
 (java.util.UUID/randomUUID)
-(java.util.Collections/binarySearch [:a :b :c :d :e] :c compare)
+(Collections/binarySearch [:a :b :c :d :e] :f compare)
 (def ja (ArrayList.))
 (.add ja 1)
 ja
@@ -302,9 +374,10 @@ de
 (future 1)
 @(future 2)
 
+(ns tap)
 ; promise
 (def pm (promise))
-(future (Thread/sleep 2000)
+(future (Thread/sleep 4000)
         (deliver pm "value"))
 ; ... do something else
 @pm
@@ -319,10 +392,13 @@ at
 (swap! at * 7)
 (swap! at * 8)
 @at
-(def m (atom {1 {:name "Kyle" :score 2} 2 {:name "Tim" :score 6}}))
+(def m (atom {1 {:name "Kyle" :score 2}
+              2 {:name "Tim" :score 6}}))
 (defn plus-five [v]
   (+ v 5))
 (swap! m update-in [1 :score] plus-five)
+(update-in [{} []] [1 :score] plus-five)
+@m
 
 ; agent
 (def ag (agent [5 9]))
@@ -331,7 +407,10 @@ at
   (println "expensive")
   (conj coll x))
 (send ag slow-conj 15)
+(send ag slow-conj 15)
+(send ag slow-conj 15)
 @ag
+(+ 1 2)
 
 ; pmap
 (def base "https://en.wikipedia.org/wiki/")
@@ -373,6 +452,11 @@ at
 ; https://www.4clojure.com/problem/68
 
 ; Require
+
+(defn plus [a b] (+ a b))
+(comment
+  (plus 1 2)
+  )
 (comment
   (upper-case "a")
   )
@@ -383,8 +467,14 @@ at
 (upper-case "a")
 (ns sprint3r.core
   (:require [clojure.string :as cs]))
+(ns bu.trainning)
 *ns*
 (cs/lower-case "A")
+
+(try
+  ([1 2 3] 4)
+  (catch IndexOutOfBoundsException e
+    (println "Hi")))
 
 ; Jar
 ; src/sprint3r/main
@@ -408,6 +498,7 @@ at
 ; Polymorphic & Record
 ; http://www.braveclojure.com/multimethods-records-protocols/
 
+(ns test)
 ; core.async
 (require '[clojure.core.async :refer [>! <! go chan]])
 (def cha (chan))
@@ -419,4 +510,34 @@ at
 (go (>! cha "Ha"))
 (go (>! cha false))
 
-(clojure.pprint/pprint (macroexpand-1 '(go (>! cha "Ha"))))
+(clojure.pprint/pprint
+  (macroexpand-1 '(go (>! cha "Ha"))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

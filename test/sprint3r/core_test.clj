@@ -2,6 +2,5 @@
   (:require [clojure.test :refer :all]
             [sprint3r.main :as m]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest plus-test
+  (is (= 3 (m/plus 1 2))))

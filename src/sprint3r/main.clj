@@ -3,3 +3,6 @@
 
 (defn -main [args]
   (println "Hello," args))
+
+(defn plus [a b]
+  (* a b))
